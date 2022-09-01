@@ -1,25 +1,45 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace CollectionWPFDemo.App;
 
-public partial class MainWindow : Window
+public partial class MainWindow : Window, INotifyPropertyChanged
 {
-    private List<string> _list;
+    public ObservableCollection<Names> List { get; set; }
+
+    private Names _names;
+    public Names Item
+    {
+        get => _names;
+        set
+        {
+            if (value == _names) return;
+            _names = value;
+            OnPropertyChanged(nameof(Item));
+        }
+    }
 
     public MainWindow()
     {
-        _list = new List<string> { "first", "second", "last" };
+        List = new ObservableCollection<Names>
+        {
+            new Names() {FirstName = "A", LastName = "AA"},
+            new Names() {FirstName = "B", LastName = "BB"},
+            new Names() {FirstName = "C", LastName = "CC"},
+            new Names() {FirstName = "D", LastName = "DD"},
+        };
 
         InitializeComponent();
-
-        ListBox.ItemsSource = _list;
     }
 
-    private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        var item = ListBox.SelectedItem;
-        MessageBox.Show(item.ToString());
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

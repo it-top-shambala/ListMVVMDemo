@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -13,9 +14,19 @@
 
         <ListBox Grid.Column="0"
                  x:Name="ListBox"
-                 SelectionChanged="ListBox_OnSelectionChanged" />
+                 ItemsSource="{Binding List}"
+                 SelectedItem="{Binding Item, Mode=TwoWay}" />
 
-        <StackPanel Grid.Column="1" />
+        <StackPanel Grid.Column="1" DataContext="{Binding Item}">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="FirstName" Width="75"/>
+                <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="LastName" Width="75"/>
+                <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300"/>
+            </StackPanel>
+        </StackPanel>
 
     </Grid>
 </Window>
